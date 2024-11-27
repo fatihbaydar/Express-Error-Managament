@@ -53,7 +53,7 @@ app.get("/user/:id?", function (req, res, next) {
   res.send({ userId: 2, userName: "John" });
 });
 
-/* ------------------------------------------------------- */
+/* ------------------------------------------------------- *
 //! status code gönderme
 app.get("/user/:id?", function (req, res, next) {
 //   req.statusCode = 400;
@@ -66,6 +66,20 @@ app.get("/user/:id?", function (req, res, next) {
 });
 
 /* ------------------------------------------------------- */
+//!try catch ile errorHandler
+app.get("/user/:id?", function (req, res, next) {
+//   res.statusCode = 400;
+  try {
+    req.params.id.toString();
+    res.send({ userId: 2, userName: "John" });
+  } catch (error) {
+    error.statusCode = 400;
+    next(error);
+  }
+});
+
+/* ------------------------------------------------------- */
+
 
 app.use("*", function (req, res) {
   res.status(404).send("The route is not found");
@@ -75,7 +89,7 @@ const errorHandlerFunction = (err, req, res, next) => {
   // console.log(res.statusCode)
   // console.log(err.statusCode)
 
-  const statusCode = err.statusCode || res.statusCode || 500
+  const statusCode = err.statusCode || res.statusCode || 500;
   res.status(statusCode).send({ isError: true, message: err.message });
 };
 app.use(errorHandlerFunction);
