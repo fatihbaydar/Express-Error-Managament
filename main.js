@@ -4,8 +4,10 @@
 ------------------------------------------------------- */
 
 const express = require("express");
+const { StatusCodes } = require("http-status-codes");
 const app = express();
 
+require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST;
 
@@ -81,7 +83,7 @@ app.get("/user/:id?", function (req, res, next) {
 /* ------------------------------------------------------- */
 class CustomError extends Error {
   name = "Custom Error";
-  statusCode = 500;
+  statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
   constructor(message, status) {
     super(message);
     this.statusCode = status;
@@ -92,12 +94,11 @@ throw new CustomError("Hata oluştu", 400);
 
 class BadRequestError extends Error {
   name = "BadRequest Error";
-  statusCode = 400;
+  statusCode = StatusCodes.BAD_REQUEST;
   constructor(message) {
     super(message);
   }
 }
-
 /* ------------------------------------------------------- */
 
 app.use("*", function (req, res) {
