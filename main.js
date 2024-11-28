@@ -67,7 +67,7 @@ app.get("/user/:id?", function (req, res, next) {
   res.send({ userId: 2, userName: "John" });
 });
 
-/* ------------------------------------------------------- */
+/* ------------------------------------------------------- *
 //!try catch ile errorHandler
 app.get("/user/:id?", function (req, res, next) {
   //   res.statusCode = 400;
@@ -89,7 +89,7 @@ class CustomError extends Error {
     this.statusCode = status;
   }
 }
-throw new CustomError("Hata oluştu", 400);
+
 /* ------------------------------------------------------- */
 
 class BadRequestError extends Error {
@@ -101,6 +101,7 @@ class BadRequestError extends Error {
 }
 /* ------------------------------------------------------- */
 
+
 app.use("*", function (req, res) {
   res.status(404).send("The route is not found");
 });
@@ -108,6 +109,7 @@ const errorHandlerFunction = (err, req, res, next) => {
   // console.log(req.statusCode) // bu çok kullanılmaz
   // console.log(res.statusCode)
   // console.log(err.statusCode)
+
 
   const statusCode = err.statusCode || res.statusCode || 500;
   res.status(statusCode).send({ isError: true, message: err.message });
