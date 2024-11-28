@@ -79,6 +79,16 @@ app.get("/user/:id?", function (req, res, next) {
 });
 
 /* ------------------------------------------------------- */
+class CustomError extends Error {
+  name = "Custom Error"
+  statusCode=500
+  constructor(message,status){
+    super(message)
+    this.statusCode=status
+  }
+}
+throw new CustomError("Hata oluştu", 400)
+/* ------------------------------------------------------- */
 
 
 app.use("*", function (req, res) {
