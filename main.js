@@ -150,7 +150,7 @@ const errorHandlerFunction = (err, req, res, next) => {
   console.log(err.name);
   const statusCode1 = err instanceof TypeError && 400;
   const statusCode = err.statusCode || statusCode1 || res.statusCode || 500;
-  res.status(statusCode).send({ isError: true, message: err.message });
+  res.status(statusCode).send({ isError: true, message: err.message, stack:err.stack, cause:err.cause });
 };
 app.use(errorHandlerFunction);
 app.listen(PORT, () => console.log("Running: http://127.0.0.1"));
