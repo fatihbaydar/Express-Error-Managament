@@ -3,7 +3,7 @@
     EXPRESSJS - ERROR MANAGEMENT
 ------------------------------------------------------- */
 
-require("express-async-errors")
+require("express-async-errors");
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
 const app = express();
@@ -13,12 +13,14 @@ const PORT = process.env.PORT || 8000;
 const HOST = process.env.HOST;
 
 /* ------------------------------------------------------- *
+
 !olması gereken
 app.get("/user/:id", function (req, res) {
   res.status(200).send({ userId: 1, userName: "John" });
 }); // route handler
 
 /* ------------------------------------------------------- *
+
 ! iki farklı send()
 app.get("/user/:id", function (req, res) {
     res.status(200).send({ userId: 1, userName: "John" }); //! sadece bunu yansıtır. 
@@ -26,6 +28,7 @@ app.get("/user/:id", function (req, res) {
   });
 
 /* ------------------------------------------------------- *
+
 ! default hata çıktısı
 app.get("/user/:id?", function (req, res) {
   req.params.id.toString();
@@ -33,11 +36,13 @@ app.get("/user/:id?", function (req, res) {
 });
 
 /* ------------------------------------------------------- *
+
 ! throw
 app.get("/user/:id?", function (req, res) {
   throw Error("Hata oluştu");
   res.send({ userId: 2, userName: "John" });
 });
+
 /* ------------------------------------------------------- *
 
 app.get("/user/:id?", function (req, res) {
@@ -50,13 +55,16 @@ app.get("/user/:id?", function (req, res) {
     res.status(400).send({ isError: true, message: "id must be string" }); // tercih edilen yöntem
   }
 });
+
 /* ------------------------------------------------------- *
+
 app.get("/user/:id?", function (req, res, next) {
   throw Error("Hata oluştu");
   res.send({ userId: 2, userName: "John" });
 });
 
 /* ------------------------------------------------------- *
+
 ! status code gönderme
 app.get("/user/:id?", function (req, res, next) {
 //   req.statusCode = 400;
@@ -69,6 +77,7 @@ app.get("/user/:id?", function (req, res, next) {
 });
 
 /* ------------------------------------------------------- *
+
 !try catch ile errorHandler
 app.get("/user/:id?", function (req, res, next) {
   //   res.statusCode = 400;
@@ -90,6 +99,7 @@ class CustomError extends Error {
     this.statusCode = status;
   }
 }
+
 /* ------------------------------------------------------- *
 
 class BadRequestError extends Error {
@@ -106,6 +116,7 @@ app.get("/user/:id?", function (req, res) {
 });
 
 /* ------------------------------------------------------- */
+
 //!Asenkron hata yakalama
 function asyncSample() {
   return new Promise((resolve, reject) => {
@@ -132,12 +143,14 @@ app.get("/user/:id?", async function (req, res, next) {
 });
 
 /* ------------------------------------------------------- */
+
 //! express-async-error sayesinde error handler rtık async hatları yakalayabilir.
-app.get("/user/:id?", async function (req, res) { 
-  await asyncSample()
+app.get("/user/:id?", async function (req, res) {
+  await asyncSample();
   res.send({ userId: 2, userName: "John" });
 });
 
+/* ------------------------------------------------------- */
 
 
 app.use("*", function (req, res) {
@@ -150,7 +163,14 @@ const errorHandlerFunction = (err, req, res, next) => {
   console.log(err.name);
   const statusCode1 = err instanceof TypeError && 400;
   const statusCode = err.statusCode || statusCode1 || res.statusCode || 500;
-  res.status(statusCode).send({ isError: true, message: err.message, stack:err.stack, cause:err.cause });
+  res
+    .status(statusCode)
+    .send({
+      isError: true,
+      message: err.message,
+      stack: err.stack,
+      cause: err.cause,
+    });
 };
 app.use(errorHandlerFunction);
 app.listen(PORT, () => console.log("Running: http://127.0.0.1"));
