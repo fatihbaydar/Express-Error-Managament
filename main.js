@@ -3,6 +3,7 @@
     EXPRESSJS - ERROR MANAGEMENT
 ------------------------------------------------------- */
 
+require("express-async-errors")
 const express = require("express");
 const { StatusCodes } = require("http-status-codes");
 const app = express();
@@ -118,7 +119,8 @@ app.get("/user/:id?", async function (req, res) {
   await asyncSample()
   res.send({ userId: 2, userName: "John" });
 });
-/* ------------------------------------------------------- */
+
+/* ------------------------------------------------------- *
 
 app.get("/user/:id?", async function (req, res, next) {
   try {
@@ -128,6 +130,15 @@ app.get("/user/:id?", async function (req, res, next) {
     next(error);
   }
 });
+
+/* ------------------------------------------------------- */
+//! express-async-error sayesinde error handler rtık async hatları yakalayabilir.
+app.get("/user/:id?", async function (req, res) { 
+  await asyncSample()
+  res.send({ userId: 2, userName: "John" });
+});
+
+
 
 app.use("*", function (req, res) {
   res.status(404).send("The route is not found");
