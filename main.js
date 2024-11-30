@@ -56,7 +56,7 @@ app.get("/user/:id?", function (req, res, next) {
 });
 
 /* ------------------------------------------------------- *
-//! status code gönderme
+! status code gönderme
 app.get("/user/:id?", function (req, res, next) {
 //   req.statusCode = 400;
   res.statusCode = 400;
@@ -68,7 +68,7 @@ app.get("/user/:id?", function (req, res, next) {
 });
 
 /* ------------------------------------------------------- *
-//!try catch ile errorHandler
+!try catch ile errorHandler
 app.get("/user/:id?", function (req, res, next) {
   //   res.statusCode = 400;
   try {
@@ -89,7 +89,7 @@ class CustomError extends Error {
     this.statusCode = status;
   }
 }
-/* ------------------------------------------------------- */
+/* ------------------------------------------------------- *
 
 class BadRequestError extends Error {
   name = "BadRequest Error";
@@ -98,10 +98,35 @@ class BadRequestError extends Error {
     super(message);
   }
 }
-/* ------------------------------------------------------- */
+
 app.get("/user/:id?", function (req, res) {
   req.params.id.toString();
   res.send({ userId: 2, userName: "John" });
+});
+
+/* ------------------------------------------------------- */
+//!Asenkron hata yakalama
+function asyncSample() {
+  return new Promise((resolve, reject) => {
+    reject(new CustomError("Asenkron işlem sırasında bir hata oluştu", 400));
+  });
+}
+
+/* ------------------------------------------------------- *
+//* error handler async hataları doğrudan yakalamaz
+app.get("/user/:id?", async function (req, res) { 
+  await asyncSample()
+  res.send({ userId: 2, userName: "John" });
+});
+/* ------------------------------------------------------- */
+
+app.get("/user/:id?", async function (req, res, next) {
+  try {
+    await asyncSample();
+    res.send({ userName: "John" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.use("*", function (req, res) {
